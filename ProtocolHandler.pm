@@ -168,35 +168,53 @@ sub getNextTrack {
 
 	Async::Util::achain(
 		steps => [
-			sub {
-				my ($result, $acb) = @_;
-
-				Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
-					$acb->($_[0])
-				}, $trackId, {
-					audioquality => $prefs->get('quality'),
-					playbackmode => 'STREAM',
-					assetpresentation => 'FULL',
-				});
-			},
-			sub {
-				my ($result, $acb) = @_;
-
-				if ($result && $result->{manifestMimeType} !~ m|application/vnd.tidal.bt| && $prefs->get('quality') eq 'HI_RES') {
-					$log->warn("failed to get streamable HiRes track ($url - $result->{manifestMimeType}), trying regular CD quality instead");
-					Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
-						$acb->($_[0])
-					}, $trackId, {
-						audioquality => 'LOSSLESS',
-						playbackmode => 'STREAM',
-						assetpresentation => 'FULL',
-					});
-
-					return;
-				}
-
-				$acb->($result);
-			},
+		    sub {
+		        my ($result, $acb) = @_;
+		
+		        Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
+		            $acb->($_[0])
+		        }, $trackId, {
+		            audioquality => $prefs->get('quality'),
+		            playbackmode => 'STREAM',
+		            assetpresentation => 'FULL',
+		        });
+		    },
+		    sub {
+		        my ($result, $acb) = @_;
+		
+		        if ($result && $result->{manifestMimeType} !~ m|application/vnd.tidal.bt| && $prefs->get('quality') eq 'HI_RES') {
+		            $log->warn("failed to get streamable HI_RES track ($url - $result->{manifestMimeType}), trying quality instead (HI_RES_LOSSLESS) (courtesy of ender :P)");
+		            Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
+		                $acb->($_[0])
+		            }, $trackId, {
+		                audioquality => 'HI_RES_LOSSLESS',
+		                playbackmode => 'STREAM',
+		                assetpresentation => 'FULL',
+		            });
+		
+		            return;
+		        }
+		
+		        $acb->($result);
+		    },
+		    sub {
+		        my ($result, $acb) = @_;
+		
+		        if ($result && $result->{manifestMimeType} !~ m|application/vnd.tidal.bt|) {
+		            $log->warn("failed to get streamable track ($url - $result->{manifestMimeType}), trying regular CD quality instead (LOSSLESS)");
+		            Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
+		                $acb->($_[0])
+		            }, $trackId, {
+		                audioquality => 'LOSSLESS',
+		                playbackmode => 'STREAM',
+		                assetpresentation => 'FULL',
+		            });
+		
+		            return;
+		        }
+		
+		        $acb->($result);
+		    },
 		],
 		cb => sub {
 			my ($response, $error) = @_;
