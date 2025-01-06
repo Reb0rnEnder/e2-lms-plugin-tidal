@@ -1,15 +1,15 @@
 <?xml version='1.0' standalone='yes'?>
 <extensions>
   <plugins>
-    <plugin version="1.5.4" minTarget="8.3" maxTarget="*" name="TIDAL">
-      <category>musicservices</category>
+    <plugin minTarget="8.3" name="TIDAL" version="1.5.5" maxTarget="*">
       <desc lang="EN">TIDAL Max for local LMS use</desc>
       <creator>Michael Herger, philippe_44, Reb0rnEnder</creator>
       <title lang="EN">E2 TIDAL local</title>
+      <url>https://github.com/Reb0rnEnder/e2-lms-plugin-tidal/releases/download/1.5.5/TIDAL.zip</url>
       <link>https://github.com/Reb0rnEnder/e2-lms-plugin-tidal</link>
-      <url>https://github.com/Reb0rnEnder/e2-lms-plugin-tidal/releases/download/1.5.4/TIDAL.zip</url>
+      <sha>b176dd9ffe4ad509d5b27c8de1330ee2ad57566a</sha>
       <icon>https://raw.githubusercontent.com/Reb0rnEnder/e2-lms-plugin-tidal/main/HTML/EN/plugins/TIDAL/html/tidal_MTL_svg_tidal.png</icon>
-      <sha>6711dc9fdc9440097519af68cd8928384edeb092</sha>
+      <category>musicservices</category>
     </plugin>
   </plugins>
 </extensions>
