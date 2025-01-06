@@ -183,11 +183,11 @@ sub getNextTrack {
 		        my ($result, $acb) = @_;
 		
 		        if ($result && $result->{manifestMimeType} !~ m|application/vnd.tidal.bt| && $prefs->get('quality') eq 'HI_RES') {
-		            $log->warn("failed to get streamable HI_RES track ($url - $result->{manifestMimeType}), trying quality instead (HI_RES_LOSSLESS) (courtesy of ender :P)");
+		            $log->warn("failed to get streamable HI_RES_LOSSLESS track ($url - $result->{manifestMimeType}), trying quality instead (HI_RES) (courtesy of ender :P)");
 		            Plugins::TIDAL::Plugin::getAPIHandler($client)->getTrackUrl(sub {
 		                $acb->($_[0])
 		            }, $trackId, {
-		                audioquality => 'HI_RES_LOSSLESS',
+		                audioquality => 'HI_RES',
 		                playbackmode => 'STREAM',
 		                assetpresentation => 'FULL',
 		            });
